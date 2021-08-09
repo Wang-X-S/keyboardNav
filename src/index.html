@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en" xmlns="">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./moblie.css">
+</head>
+<body>
+<header class="header" id="header">
+  <div class="logo">KeyboardNav</div>
+  <div class="git">
+    <a href="https://github.com/Wang-X-S">
+
+        <img  src = "./img/github.svg"   alt="漂亮的绿色圆圈"  class="icon2"/>
+      <span>Github</span>
+    </a>
+  </div>
+</header>
+<main>
+  <div id="baiduWrapper"  class=" baiduWrapper">
+    <span class="inputWrapper">
+      <input id="keyword" name="keyword" type="text" autocomplete="off" spellcheck="false" placeholder="搜索">
+    </span>
+    <button id="btn">百度一下</button>
+  </div>
+  <div class="warpper" id="keyboard"></div>
+</main>
+  <script>
+
+    //1.初始化数据
+    let keys={
+      '0':{0:'q',1:'w',2:'e',3:'r',4:'t',5:'y',6:'u',7:'i',8:'o',9:'p',length:10},
+      '1':{0:'a',1:'s',2:'d',3:'f',4:'g',5:'h',6:'j',7:'k',8:'l',length:9},
+      '2':{0:'z',1:'x',2:'c',3:'v',4:'b',5:'n',6:'m',length:7},
+      'length':3
+    }
+    var hash={
+      'q':'www.qq.com','w':'www.weibo.com','a':'www.aliyun.com','i':'www.iqiyi.com',
+      'z':'www.zhihu.com','g':'github.com','s':'stackoverflow.com','b':'www.bilibili.com',
+      'g':'github.com'
+    }
+    //取出localStorage中的对应的hash 是否为null
+
+    //函数
+    function tag(tagName) {
+      return document.createElement(tagName)
+    }
+
+    function createButton(id){
+      let buttonX = tag('button')
+      buttonX.textContent='Edit'
+      buttonX.id = id
+      buttonX.onclick = function (cyj) { //bottonX容器
+        let buttonClick=cyj['target'] //记录<button id=''>编辑</botton>被用户点击的按钮
+        let key = buttonClick['id'] //q w e r cyj['taget']['id'] 就是用户点击的元素
+        let img2 = buttonClick.previousSibling.previousSibling
+        let x =window.prompt('请输入网址')
+        hash[key]=x
+        localStorage.setItem('newWebsite',JSON.stringify(hash))
+
+        img2.src = 'http://'+ x +'/favicon.ico'
+        img2.onerror=function (ero) {
+            ero.target.src='./img/alticon.jpg'
+        }
+      }
+      return buttonX
+    }
+    function createSpan(textContent) {
+      var span = tag('span')
+      span.textContent = row[index2]
+      span.className = 'text'
+      return span
+    }
+    function createImg(domain){
+      let imgIcon = tag('img')
+      if(domain){
+        imgIcon.src = 'http://'+domain+'/favicon.ico'
+      }else{
+        imgIcon.src = './img/alticon.jpg'
+      }
+      return imgIcon
+    }
+    //2. 生成键盘
+    // 遍历 keys，生成kbd标签
+    for (var index = 0; index < keys['length']; index = index + 1) {  //0 1 2
+      var divRow = document.createElement('div')
+      divRow.className = 'row'
+      var keyboard = document.getElementById('keyboard')
+      keyboard.appendChild(divRow)
+
+      var row = keys[index] // 第一数组 第二数组 第三数组
+      for (var index2 = 0; index2 < row['length']; index2 = index2 + 1) {
+        var kbdSpan = createSpan(row[index2])
+        var kbdButton = createButton(row[index2])
+        var kbdImg = createImg(hash[row[index2]])
+
+        var theKbd = document.createElement('kbd')
+        theKbd.className = 'key'
+        theKbd.appendChild(kbdImg)
+        theKbd.appendChild(kbdSpan)
+        theKbd.appendChild(kbdButton)
+
+
+        divRow.appendChild(theKbd)
+      }
+    }
+//3.监听事件
+    let stringBaidu = 'https://www.baidu.com/s?wd='
+    let input = document.getElementById('keyword')
+
+    document.addEventListener('keypress',function (e) {
+      let key =e['key']
+      let website = hash[key]
+      window.open('http://'+website,'_blank')
+    })
+    input.addEventListener('keypress',function (e) {
+      e.stopPropagation()
+      if(e.keyCode===13){
+        let stringBaidu='https://www.baidu.com/s?wd='
+        let query = document.getElementById('keyword').value.toString()
+        stringBaidu=stringBaidu.concat(query)
+        window.open(url=`${stringBaidu}`,target = '_blank')
+      }
+    })
+    btn.onclick = function (e) {
+      let stringBaidu = 'https://www.baidu.com/s?wd='
+      let query = document.getElementById('keyword').value.toString()
+      stringBaidu = stringBaidu.concat(query)
+      window.open(url = `${stringBaidu}`, target = '_blank')
+    }
+
+
+  </script>
+</body>
+</html>
