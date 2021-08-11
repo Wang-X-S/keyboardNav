@@ -44,7 +44,10 @@
       'g':'github.com'
     }
     //取出localStorage中的对应的hash 是否为null
-
+    var hashInlocalStrage = JSON.parse(localStorage.getItem('newWebsite') || 'null')
+    if (hashInlocalStrage) {
+      hash = hashInlocalStrage
+    }
     //函数
     function tag(tagName) {
       return document.createElement(tagName)
